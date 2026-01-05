@@ -1,0 +1,30 @@
+output_dir: "/home/mmzim/Videos/mkvauto"
+
+discord_webhook: "https://discord.com/api/webhooks/1416300769916751873/wkrYi7STDDSxxLAG9asfZoiUAWYGjYI1Do6Yqy_NPvXStEy93JAcp1Z0wX9IwxZHT9mu"
+
+drive:
+  path: "/dev/sr0"
+
+thresholds:
+  movie_min_minutes: 60
+  episode_min_minutes: 18
+
+makemkv:
+  binary_path: "makemkvcon"
+
+handbrake:
+  binary_path: "HandBrakeCLI"
+  presets_dir: "/home/mmzim/.config/mkvauto/presets"
+  threads: 12
+
+  bluray:
+    preset_file: "1080p.json"
+    # preset_name: "1080p"  # Optional - if omitted, uses first preset in file
+    audio_languages: ["eng"]
+    subtitle_languages: ["eng"]
+
+  dvd:
+    preset_file: "1080p.json"
+    # preset_name: "1080p"  # Optional - if omitted, uses first preset in file
+    audio_languages: ["eng"]
+    subtitle_languages: ["eng"]

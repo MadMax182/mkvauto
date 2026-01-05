@@ -1,0 +1,33 @@
+output_dir: "/path/to/output"
+
+discord_webhook: "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL"
+
+drive:
+  path: "/dev/sr0"
+
+thresholds:
+  movie_min_minutes: 60
+  episode_min_minutes: 18
+
+makemkv:
+  binary_path: "makemkvcon"
+
+handbrake:
+  binary_path: "HandBrakeCLI"
+  presets_dir: "/path/to/presets"  # Directory containing HandBrake preset JSON files
+  threads: 0                       # Number of encoding threads (0 = auto, or set to specific number like 8)
+
+  # Blu-ray encoding preset
+  # Create presets in HandBrake GUI and export them as JSON to presets_dir
+  bluray:
+    preset_file: "bluray.json"          # Filename (will look in presets_dir)
+    # preset_name: "PresetName"         # Optional - if omitted, uses first preset in file
+    audio_languages: ["eng"]            # Audio languages to include (ISO 639-2 codes)
+    subtitle_languages: ["eng"]         # Subtitle languages to include (ISO 639-2 codes)
+
+  # DVD encoding preset
+  dvd:
+    preset_file: "dvd.json"             # Can use different file
+    # preset_name: "PresetName"         # Optional - specify if file has multiple presets
+    audio_languages: ["eng"]            # Audio languages to include
+    subtitle_languages: ["eng", "spa"]  # Can specify multiple languages
