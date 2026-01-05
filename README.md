@@ -112,8 +112,44 @@ handbrake:
 - HandBrake CLI (`HandBrakeCLI`)
 - Go 1.21+ (for building)
 
-## Building
+## Installation
+
+### Automated Installation (Recommended)
+
+The install script will:
+- Install all dependencies (makemkv, handbrake-cli, go)
+- Set up MakeMKV license key
+- Configure user permissions
+- Create configuration files
+- Build and install mkvauto
+- Optionally set up a private pacman repository
 
 ```bash
+git clone https://github.com/yourusername/mkvauto.git
+cd mkvauto
+./install.sh
+```
+
+The installer will prompt you for:
+- MakeMKV beta license key (get from: https://forum.makemkv.com/forum/viewtopic.php?t=1053)
+- Discord webhook URL (optional)
+- Output directory for encoded videos
+- Installation method (system-wide, private repo, or user-only)
+
+### Manual Installation
+
+```bash
+# Install dependencies
+yay -S makemkv handbrake-cli go
+
+# Build
 go build -o mkvauto ./cmd/mkvauto
+
+# Install
+sudo install -Dm755 mkvauto /usr/local/bin/mkvauto
+
+# Create config
+mkdir -p ~/.config/mkvauto
+cp config.example.yaml ~/.config/mkvauto/config.yaml
+nano ~/.config/mkvauto/config.yaml
 ```
