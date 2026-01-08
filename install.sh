@@ -106,11 +106,28 @@ fi
 # ============================================
 info "Setting up optical drive permissions..."
 
+# Load sg module for MakeMKV SCSI access
+if ! lsmod | grep -q "^sg "; then
+    info "Loading sg kernel module..."
+    sudo modprobe sg
+    success "Loaded sg kernel module"
+fi
+
+# Make sg module load on boot
+if [ ! -f /etc/modules-load.d/sg.conf ]; then
+    info "Configuring sg module to load on boot..."
+    echo "sg" | sudo tee /etc/modules-load.d/sg.conf > /dev/null
+    success "sg module will load automatically on boot"
+else
+    success "sg module already configured to load on boot"
+fi
+
 # Add user to optical group for disc access
+NEEDS_RESTART=false
 if ! groups $USER | grep -q '\boptical\b'; then
     sudo usermod -aG optical $USER
     success "Added $USER to 'optical' group"
-    warn "You'll need to log out and back in for group changes to take effect"
+    NEEDS_RESTART=true
 else
     success "User already in 'optical' group"
 fi
@@ -451,8 +468,8 @@ echo ""
 info "Next steps:"
 echo "  1. Customize your config: nano $CONFIG_DIR/config.yaml"
 echo "  2. Create/import HandBrake presets to: $PRESETS_DIR/"
-if ! groups $USER | grep -q '\boptical\b'; then
-    echo "  3. Log out and back in (for group changes to take effect)"
+if [ "$NEEDS_RESTART" = true ]; then
+    echo "  3. Restart your system (for group changes to take effect)"
     echo "  4. Run: mkvauto"
 else
     echo "  3. Run: mkvauto"
@@ -477,4 +494,18 @@ if [ "$MAKEMKV_KEY" == "" ]; then
     echo ""
 fi
 
-success "Happy ripping! 📀"
+success "Happy ripping!"
+
+# Prompt for restart if needed
+if [ "$NEEDS_RESTART" = true ]; then
+    echo ""
+    warn "A system restart is required for optical drive access."
+    read -p "Would you like to restart now? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        info "Restarting system..."
+        sudo reboot
+    else
+        warn "Please restart your system before running mkvauto."
+    fi
+fi
